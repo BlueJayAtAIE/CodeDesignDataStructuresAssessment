@@ -77,7 +77,9 @@ public:
 		// Post-increment (returns an iterator to the current Node while incrementing the existing iterator).
 		iterator operator++(int)
 		{
-			return (*this)++;
+			iterator temp = this;
+			current = current->next;
+			return temp;
 		}
 
 		// Pre-decrement (returns a refernce to this iterator after it is decremented).
@@ -90,21 +92,25 @@ public:
 		// Post-decrement (returns an iterator to the current Node while decrementing the existing iterator).
 		iterator operator--(int)
 		{
-			return (*this)--;
+			iterator temp = this;
+			current = current->previous;
+			return temp;
 		}
 	};
 
-	// Creates an iterator at the Head of the LinkedList.
-	iterator begin() const
+	// Creates a const iterator pointing to the first element.
+	const iterator begin() const
 	{
 		iterator temp(head);
 		return temp;
 	}
 
-	// Creates an iterator at the Tail of the LinkedList.
-	iterator end() const
+	// Creates a const iterator pointing to one past the last element.
+	const iterator end() const
 	{
 		iterator temp(tail);
+		//++temp;
+		// TODO: you need to redo the == and != to work with this, then uncomment the above.
 		return temp;
 	}
 
@@ -135,29 +141,24 @@ public:
 
 	// UTILITY -----------------------------------------------------------
 
-	// please delete this after testing,,,, TODO
-	T& deletThis()
-	{
-		return head->next->data;
-		// WHAT??? THIS ACTUALLY WORKS????? HEL L O
-		// This is really gross and cheesy looking but also has a lot of uses.
-	}
-
 	// Adds element to the front (Head).
 	void push_front(const T& val)
 	{
 		Node * temp = new Node;
 		temp->data = val;
 		temp->next = head;
+		head->previous = temp;
 		head = temp;
 	}
 
 	// Adds element to the back (Tail).
 	void push_back(const T& val)
 	{
+		// TODO
 		Node * temp = new Node;
 		temp->data = val;
 		temp->previous = tail;
+		tail->next = temp;
 		tail = temp;
 	}
 

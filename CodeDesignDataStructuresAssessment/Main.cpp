@@ -25,14 +25,16 @@ int main()
 
 	bleh.push_front(8);
 	bleh.push_front(7);
-	//bleh.push_back(4);
+	bleh.push_front(9);
+	bleh.push_front(2);
+	bleh.push_back(4);
 
 	//bleh.remove(8);
 
-	//for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	//{
-	//	cout << (*it) << endl;
-	//}
+	for (auto it = bleh.begin(); it != bleh.end(); ++it)
+	{
+		cout << (*it) << endl;
+	}
 
 
 	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
@@ -71,6 +73,7 @@ int main()
 		cout << (*it) << endl;
 	}
 	
-	while (true) { }
+	cout << "Please break-point this line!!" << endl;
+
 	return 0;
 }
