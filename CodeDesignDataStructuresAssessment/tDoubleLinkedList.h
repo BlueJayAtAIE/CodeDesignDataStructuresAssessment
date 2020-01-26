@@ -42,7 +42,7 @@ public:
 		// Returns true if the iterator points to the same Node.
 		bool operator==(const iterator& rhs) const
 		{
-			if (current->data == rhs.current->data && current->next == rhs.current->next && current->previous == rhs.current->previous)
+			if (current == rhs.current)
 			{
 				return true;
 			}
@@ -53,7 +53,7 @@ public:
 		// Returns true if the iterator DOES NOT point to the same Node.
 		bool operator!=(const iterator& rhs) const
 		{
-			if (current->data != rhs.current->data && current->next != rhs.current->next && current->previous != rhs.current->previous)
+			if (current != rhs.current)
 			{
 				return true;
 			}
@@ -77,7 +77,7 @@ public:
 		// Post-increment (returns an iterator to the current Node while incrementing the existing iterator).
 		iterator operator++(int)
 		{
-			iterator temp = this;
+			iterator temp = *this;
 			current = current->next;
 			return temp;
 		}
@@ -92,7 +92,7 @@ public:
 		// Post-decrement (returns an iterator to the current Node while decrementing the existing iterator).
 		iterator operator--(int)
 		{
-			iterator temp = this;
+			iterator temp = *this;
 			current = current->previous;
 			return temp;
 		}
@@ -108,9 +108,9 @@ public:
 	// Creates a const iterator pointing to one past the last element.
 	const iterator end() const
 	{
+		// NULL can also be uaed here or whatever TODO fix this awful comment :ok_hand:
 		iterator temp(tail);
-		//++temp;
-		// TODO: you need to redo the == and != to work with this, then uncomment the above.
+		++temp;
 		return temp;
 	}
 
@@ -119,12 +119,8 @@ public:
 	// Default Constructor. Initializes head and tail to Null.
 	tDoubleLinkedList()
 	{
-		Node * temp = new Node;
-		temp->data = NULL;
-		temp->next = nullptr;
-		temp->previous = nullptr;
-		head = temp;
-		tail = head;
+		head = NULL;
+		tail = NULL;
 	}
 
 	// Copy Constructor.
@@ -144,21 +140,37 @@ public:
 	// Adds element to the front (Head).
 	void push_front(const T& val)
 	{
+
 		Node * temp = new Node;
 		temp->data = val;
 		temp->next = head;
-		head->previous = temp;
+		temp->previous = NULL;
+		if (head != NULL)
+		{
+			head->previous = temp;
+		}
+		else
+		{
+			tail = temp;
+		}
 		head = temp;
 	}
 
 	// Adds element to the back (Tail).
 	void push_back(const T& val)
 	{
-		// TODO
 		Node * temp = new Node;
 		temp->data = val;
 		temp->previous = tail;
-		tail->next = temp;
+		temp->next = NULL;
+		if (tail != NULL)
+		{
+			tail->next = temp;
+		}
+		else
+		{
+			head = temp;
+		}
 		tail = temp;
 	}
 
@@ -166,7 +178,7 @@ public:
 	void pop_front()
 	{
 		// Means this will only run if there is a head to begin with.
-		if (head->data != NULL && size() > 0)
+		if (head != NULL)
 		{
 			Node * temp = head;
 			head = head->next;
@@ -178,7 +190,7 @@ public:
 	void pop_back()
 	{
 		// Means this will only run if there is a tail to begin with.
-		if (tail->data != NULL && size() > 0)
+		if (tail != NULL)
 		{
 			Node * temp = tail;
 			tail = tail->previous;
@@ -215,23 +227,41 @@ public:
 	// Removes all elements equal to the given value.
 	void remove(const T& val)
 	{
-		for (auto it = begin(); it != end(); ++it)
+		Node * node = head;
+		while (node != NULL)
 		{
-			/*if (it.currentNode().next->data == val)
+			if (node->data == val)
 			{
-				Node  * temp = it.currentNode().next;
-				it.currentNode().next = it.currentNode().next->next;
-				delete temp;
-			}*/
+				if (node != head)
+				{
+					node->previous->next = node->next;
+				}
+				else
+				{
+					head = head->next;
+				}
 
-			// TODO
+				if (node != tail)
+				{
+					node->next->previous = node->previous;
+				}
+				else
+				{
+					tail = tail->previous;
+				}
+
+				delete node;
+				break;
+			}
+
+			node = node->next;
 		}
 	}
 
 	// Returns true is there are no elements.
 	bool empty() const
 	{
-		if (head == tail && head->data == NULL)
+		if (head == NULL)
 		{
 			return true;
 		}
@@ -259,7 +289,7 @@ public:
 		{
 			// It doesn't matter if this is pop_front or pop_back.
 			// Functionally the same.
-			pop_front();
+			// TODO
 		}
 	}
 
@@ -267,12 +297,21 @@ public:
 	// New elements are default initialized.
 	void resize(size_t newSize)
 	{
-		// This should only run if the newsize is greater than our current size.
-		if (newSize > size())
+		int actualSize = size();
+
+		// This should only run if the newSize is greater than our current size.
+		if (newSize > actualSize)
 		{
-			for (auto it = begin(); it != end(); ++it)
+			for (size_t i = 0; i < (newSize - actualSize); i++)
 			{
 				push_back(0);
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < (actualSize - newSize); i++)
+			{
+				pop_back();
 			}
 		}
 	}
@@ -292,14 +331,3 @@ public:
 //	 At least 1 sorting function (Pick from: Bubble, Insert, Merge).
 // Stretch goals:
 //   Additional functions: Reverse, Unique, Insert(?)
-
-// Fix these:
-// Gordo problem #1:
-// When a list is created, head and tail are the same cell. As intended.
-// When push_front is called it adds a cell in front of the head, replacing it as new head. As intended.
-// At no point is tail ever changed to not be that Null starting node.
-// This means that when things are added AFTER the tail, a null value, nullpointing node is revieled to the array. NOT AS INTENDED.
-
-// Gordo problem #2:
-// A large amount of functions have suddenly stopped working.
-// This may be because of changes to how the list handles itself that happened at... some point.

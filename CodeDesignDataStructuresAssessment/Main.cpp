@@ -29,7 +29,9 @@ int main()
 	bleh.push_front(2);
 	bleh.push_back(4);
 
-	//bleh.remove(8);
+	bleh.remove(8);
+	bleh.remove(4);
+	bleh.remove(2);
 
 	for (auto it = bleh.begin(); it != bleh.end(); ++it)
 	{
@@ -39,7 +41,7 @@ int main()
 
 	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
 
-	//bleh.resize(7);
+	bleh.resize(7);
 
 	for (auto it = bleh.begin(); it != bleh.end(); ++it)
 	{
@@ -49,8 +51,6 @@ int main()
 	bleh.pop_front();
 
 	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
-
-	//cout << bleh.deletThis() << endl;
 
 	//bleh.clear();
 
