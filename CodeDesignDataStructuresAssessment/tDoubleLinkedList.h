@@ -17,7 +17,7 @@ private:
 public:
 	// CONSTRUCTORS AND DESTRUCTORS -------------------------------------------------------------------------
 
-	// Default Constructor. Initializes head and tail to Null.
+	// Default Constructor. Initializes head and tail to NULL.
 	tDoubleLinkedList()
 	{
 		head = NULL;
@@ -38,7 +38,8 @@ public:
 	// Destructor.
 	~tDoubleLinkedList()
 	{
-		// TODO
+		// Clear deletes all the dynamically allocated nodes.
+		clear();
 	}
 
 	// UTILITY ----------------------------------------------------------------------------------------------
@@ -160,7 +161,7 @@ public:
 			// Create a node pointer to head. We create this so we can delete this later.
 			Node * node = head;
 
-			// While the node ISNT null (null being beyond the bounds of the array)...
+			// While the node ISNT NULL (NULL being beyond the bounds of the array)...
 			while (node != NULL)
 			{
 				if (node->data == val)
@@ -229,19 +230,40 @@ public:
 	// Destroys every single Node in the LinkedList (but not the list itself!).
 	void clear()
 	{
-		for (auto it = begin(); it != end(); ++it)
+		// Create a node and set it to head. This will be deleted later.
+		// I've used a node incrementing in the place of an iterator because
+		// from what I've found there is no way to delete the node an iterator points to.
+		Node * node = head;
+
+		// While node isn't NULL, create node toDelete as a copy of node, increment node, then delete toDelete.
+		while (node != NULL)
 		{
-			// IT ABSOLUTELY MATTERS PLEASE COPY THE LOGIC FROM POP_BACK.
-			// If you used pop forward the iterators would be invalidated.
-			// TODO
+			Node * toDelete = node;
+			node = node->next;
+			delete toDelete;
 		}
+
+		// Here at the very end, delete node and set head/tail to NULL so any push functions work again.
+		delete node;
+		head = NULL;
+		tail = NULL;
+
+		//iterator it = begin();
+		//while (it != end())
+		//{
+			//iterator itTemp = it;
+			//++it;
+			//delete itTemp.current;   // Current is private- doesn't work. C2248.
+			//delete itTemp->current;  // Doesnt use -> operator- doesn't work. C2819 and C2232.
+			//delete itTemp;           // Delete cannot figure out HOW to delete iterators. C2440.
+		//}
 	}
 
 	// Resizes the LinkedList to contain the given number of elements.
 	// New elements are default initialized.
 	void resize(size_t newSize)
 	{
-		int actualSize = size();
+		size_t actualSize = size();
 
 		// If the new size is bigger than the size, add onto it- else take off the back.
 		if (newSize > actualSize)
@@ -289,7 +311,7 @@ public:
 	public:
 		// CONSTRUCTORS AND DESTRUCTORS ---------------------------------------------------------------------
 
-		// Initalizies an empty iterator pointing to Null.
+		// Initalizies an empty iterator pointing to NULL.
 		iterator()
 		{
 			current = nullptr;
@@ -397,7 +419,7 @@ public:
 
 
 // PROGRESS
-// 26/28 Baseline functions done.
+// 28/28 Baseline functions done.
 // Still needed:
 //	 Import sorting stuff from exersizes (All 3 done).
 // Stretch goals (if I'm feeling like I want to do extra for fun.):

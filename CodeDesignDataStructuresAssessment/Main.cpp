@@ -40,7 +40,7 @@ int main()
 
 	cout << "--------------------------------" << endl << "Blah is created as a copy of Bleh." << endl << "All 8s 4s and 2s are removed from Bleh." << endl << endl;
 
-	//bleh.resize(7);
+	bleh.resize(12);
 
 	bleh.remove(8);
 	bleh.remove(4);
@@ -58,7 +58,7 @@ int main()
 		cout << "Blah:" << (*it) << endl;
 	}
 
-	//bleh.pop_front();
+	bleh.pop_front();
 
 	cout << "--------------------------------" << endl << "Bleh will now be set to Blah." << endl << endl;
 
@@ -69,18 +69,11 @@ int main()
 		cout << "Bleh:" << (*it) << endl;
 	}
 
+	bleh.clear();
+
 	if (bleh.empty())
 	{
 		cout << "YEET" << endl << endl;
-	}
-
-	bleh.pop_back();
-
-	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
-
-	for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	{
-		cout << (*it) << endl;
 	}
 	
 	cout << "Please break-point this line!!" << endl;
