@@ -1,12 +1,12 @@
 #include <iostream>
-#include "Main.h"
+#include "Sorting.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
 
 template<typename T>
-void printVectorValues(vector<T> vec);
+void printVectArrValues(T container);
 
 int main()
 {
@@ -21,19 +21,19 @@ int main()
 	vec.push_back(2);
 
 	cout << "Vector vec has just been created with the following values: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	bubbleSort(vec);
 
 	cout << "vec has been sorted in ascending order using Bubble Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	bubbleSortFlip(vec);
 
 	cout << "vec has been sorted in descending order using Bubble Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	vec.clear();
@@ -47,19 +47,19 @@ int main()
 	cout << "----------------------------------------------------------------------------------------------------" << endl << endl;
 
 	cout << "Vector vec has just been cleared, and the following values have been added back: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	insertionSort(vec);
 
 	cout << "vec has been sorted in ascending order using Insertion Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	insertionSortFlip(vec);
 
 	cout << "vec has been sorted in descending order using Insertion Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	cout << "----------------------------------------------------------------------------------------------------" << endl << endl;
@@ -73,19 +73,39 @@ int main()
 	vec.push_back(9);
 
 	cout << "Vector vec has just been cleared, and the following values have been added back: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	MergeSort(vec, 0, (vec.size() - 1));
 
 	cout << "vec has been sorted in ascending order using Merge Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
 	cout << endl << endl;
 
 	MergeSortFlip(vec, 0, (vec.size() - 1));
 
 	cout << "vec has been sorted in descending order using Merge Sort. New value order: ";
-	printVectorValues(vec);
+	printVectArrValues(vec);
+	cout << endl << endl;
+
+	cout << "----------------------------------------------------------------------------------------------------" << endl << endl;
+
+	array<int, 7> arr = { 4, 7, 1, 1, 5, 9, 2 };
+
+	cout << "Array arr has just been created with the following values: ";
+	printVectArrValues(arr);
+	cout << endl << endl;
+
+	bubbleSort(arr);
+
+	cout << "arr has been sorted in ascending order using Bubble Sort. New value order: ";
+	printVectArrValues(arr);
+	cout << endl << endl;
+
+	insertionSortFlip(arr);
+
+	cout << "arr has been sorted in descending order using Insertion Sort. New value order: ";
+	printVectArrValues(arr);
 	cout << endl << endl;
 
 	cout << ">> Press any lettered key and then enter to close this window. <<" << endl;
@@ -95,10 +115,10 @@ int main()
 }
 
 template<typename T>
-void printVectorValues(vector<T> vec)
+void printVectArrValues(T container)
 {
-	for (size_t i = 0; i < vec.size(); i++)
+	for (size_t i = 0; i < container.size(); i++)
 	{
-		cout << vec[i] << ", ";
+		cout << container[i] << ", ";
 	}
 }
