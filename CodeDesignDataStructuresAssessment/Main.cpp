@@ -24,10 +24,23 @@ int main()
 	}
 
 	bleh.push_front(8);
+	bleh.push_front(8);
 	bleh.push_front(7);
 	bleh.push_front(9);
 	bleh.push_front(2);
 	bleh.push_back(4);
+
+
+	for (auto it = bleh.begin(); it != bleh.end(); ++it)
+	{
+		cout << "Bleh:" << (*it) << endl;
+	}
+
+	tDoubleLinkedList<int> blah(bleh);
+
+	cout << "--------------------------------" << endl << "Blah is created as a copy of Bleh." << endl << "All 8s 4s and 2s are removed from Bleh." << endl << endl;
+
+	//bleh.resize(7);
 
 	bleh.remove(8);
 	bleh.remove(4);
@@ -35,28 +48,25 @@ int main()
 
 	for (auto it = bleh.begin(); it != bleh.end(); ++it)
 	{
-		cout << (*it) << endl;
+		cout << "Bleh:" << (*it) << endl;
 	}
 
+	cout << endl;
 
-	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
+	for (auto it = blah.begin(); it != blah.end(); ++it)
+	{
+		cout << "Blah:" << (*it) << endl;
+	}
 
-	bleh.resize(7);
+	//bleh.pop_front();
+
+	cout << "--------------------------------" << endl << "Bleh will now be set to Blah." << endl << endl;
+
+	bleh = blah;
 
 	for (auto it = bleh.begin(); it != bleh.end(); ++it)
 	{
-		cout << (*it) << endl;
-	}
-
-	bleh.pop_front();
-
-	cout << "--------------------------------" << endl << "Size: " << bleh.size() << endl << endl;
-
-	//bleh.clear();
-
-	for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	{
-		cout << (*it) << endl;
+		cout << "Bleh:" << (*it) << endl;
 	}
 
 	if (bleh.empty())

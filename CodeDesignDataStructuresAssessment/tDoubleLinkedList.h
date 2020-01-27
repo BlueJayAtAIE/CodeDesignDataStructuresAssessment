@@ -15,106 +15,7 @@ private:
 	Node * tail;  // Pointer to the ending Node of the LinkedList.
 
 public:
-	// ITERATORS ---------------------------------------------------------
-
-	class iterator 
-	{
-	private:
-		Node * current;  // Current Node being operated upon.
-
-	public:
-		// CONSTRUCTORS AND DESTRUCTORS ----------------------------------
-
-		// Initalizies an empty iterator pointing to Null.
-		iterator()
-		{
-			current = nullptr;
-		}
-
-		// Initalizes an iterator pointing to the given Node.
-		iterator(Node * startNode)
-		{
-			current = startNode;
-		}
-
-		// OPERATORS -----------------------------------------------------
-
-		// Returns true if the iterator points to the same Node.
-		bool operator==(const iterator& rhs) const
-		{
-			if (current == rhs.current)
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		// Returns true if the iterator DOES NOT point to the same Node.
-		bool operator!=(const iterator& rhs) const
-		{
-			if (current != rhs.current)
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		// Returns a reference to the element pointed to by the current Node.
-		T& operator*() const
-		{
-			return current->data;
-		}
-
-		// Pre-increment (returns a refernce to this iterator after it is incremented).
-		iterator& operator++()
-		{
-			current = current->next;
-			return *this;
-		}
-
-		// Post-increment (returns an iterator to the current Node while incrementing the existing iterator).
-		iterator operator++(int)
-		{
-			iterator temp = *this;
-			current = current->next;
-			return temp;
-		}
-
-		// Pre-decrement (returns a refernce to this iterator after it is decremented).
-		iterator& operator--()
-		{
-			current = current->previous;
-			return *this;
-		}
-
-		// Post-decrement (returns an iterator to the current Node while decrementing the existing iterator).
-		iterator operator--(int)
-		{
-			iterator temp = *this;
-			current = current->previous;
-			return temp;
-		}
-	};
-
-	// Creates a const iterator pointing to the first element.
-	const iterator begin() const
-	{
-		iterator temp(head);
-		return temp;
-	}
-
-	// Creates a const iterator pointing to one past the last element.
-	const iterator end() const
-	{
-		// NULL can also be used here since the value after tail will always be NULL;
-		iterator temp(tail);
-		++temp;
-		return temp;
-	}
-
-	// CONSTRUCTORS AND DESTRUCTORS --------------------------------------
+	// CONSTRUCTORS AND DESTRUCTORS -------------------------------------------------------------------------
 
 	// Default Constructor. Initializes head and tail to Null.
 	tDoubleLinkedList()
@@ -126,7 +27,12 @@ public:
 	// Copy Constructor.
 	tDoubleLinkedList(const tDoubleLinkedList& other)
 	{
-		// TODO
+		head = NULL;
+		tail = NULL;
+		for (auto it = other.begin(); it != other.end(); ++it)
+		{
+			push_back(*it);
+		}
 	}
 
 	// Destructor.
@@ -135,7 +41,7 @@ public:
 		// TODO
 	}
 
-	// UTILITY -----------------------------------------------------------
+	// UTILITY ----------------------------------------------------------------------------------------------
 
 	// Adds element to the front (Head).
 	void push_front(const T& val)
@@ -238,43 +144,57 @@ public:
 	// Removes all elements equal to the given value.
 	void remove(const T& val)
 	{
-		// Create a node pointer to head.
-		Node * node = head;
+		// Since we may remove multiple elements matching val, we need to find how many loops we need to remove everything.
+		size_t timesToLoop = 0;
 
-		// While the node ISNT null (null being beyond the bounds of the array)...
-		while (node != NULL)
+		for (auto it = begin(); it != end(); ++it)
 		{
-			if (node->data == val)
+			if (*it == val)
 			{
-				// If the node isnt the head, set the previous node's next to the next of the current node...
-				// if it is the head, change head to the current head's next....
-				if (node != head)
-				{
-					node->previous->next = node->next;
-				}
-				else
-				{
-					head = head->next;
-				}
-
-				// If the node isnt the tail, set the next node's previous to the previous of the current node...
-				// if it is the tail, change tail to the current tail's previous....
-				if (node != tail)
-				{
-					node->next->previous = node->previous;
-				}
-				else
-				{
-					tail = tail->previous;
-				}
-
-				// And delete the node, then break out early.
-				delete node;
-				break;
+				timesToLoop++;
 			}
+		}
 
-			// Increment node to be it's own next node.
-			node = node->next;
+		for (size_t i = 0; i < timesToLoop; i++)
+		{
+			// Create a node pointer to head. We create this so we can delete this later.
+			Node * node = head;
+
+			// While the node ISNT null (null being beyond the bounds of the array)...
+			while (node != NULL)
+			{
+				if (node->data == val)
+				{
+					// If the node isnt the head, set the previous node's next to the next of the current node...
+					// if it is the head, change head to the current head's next....
+					if (node != head)
+					{
+						node->previous->next = node->next;
+					}
+					else
+					{
+						head = head->next;
+					}
+
+					// If the node isnt the tail, set the next node's previous to the previous of the current node...
+					// if it is the tail, change tail to the current tail's previous....
+					if (node != tail)
+					{
+						node->next->previous = node->previous;
+					}
+					else
+					{
+						tail = tail->previous;
+					}
+
+					// And delete the node, then break out early.
+					delete node;
+					break;
+				}
+
+				// Increment node to be it's own next node.
+				node = node->next;
+			}
 		}
 	}
 
@@ -292,6 +212,10 @@ public:
 	// Returns the size of the LinkedList.
 	size_t size() const
 	{
+		// While not part of the listed functions, the documentation (both cppref and cplusplus)  
+		// for lists says it does have a size function. I've used it very sparingly elsewhere,
+		// for the purpose of attempting this implimentation as intended as possible.
+
 		size_t temp = 0;
 
 		for (auto it = begin(); it != end(); ++it)
@@ -336,18 +260,145 @@ public:
 		}
 	}
 
-	// OPERATORS ---------------------------------------------------------
+	// OPERATORS --------------------------------------------------------------------------------------------
 
 	tDoubleLinkedList& operator=(const tDoubleLinkedList& rhs)
 	{
-		// TODO
+		// Resize ourselves to match the list we're setting ourseves equal to.
+		resize(rhs.size());
+
+		// Create an iterator for the right hand side.
+		// Set left hand side's data to right hand side's, and increment both iterators.
+		auto itRHS = rhs.begin();
+		for (auto it = begin(); it != end(); ++it)
+		{
+			*it = *itRHS;
+			++itRHS;
+		}
+
+		return *this;
+	}
+
+	// ITERATORS ------------------------------------------------------------------------------------------------------
+
+	class iterator
+	{
+	private:
+		Node * current;  // Current Node being operated upon.
+
+	public:
+		// CONSTRUCTORS AND DESTRUCTORS ---------------------------------------------------------------------
+
+		// Initalizies an empty iterator pointing to Null.
+		iterator()
+		{
+			current = nullptr;
+		}
+
+		// Initalizes an iterator pointing to the given Node.
+		iterator(Node * startNode)
+		{
+			current = startNode;
+		}
+
+		// OPERATORS ----------------------------------------------------------------------------------------
+
+		// Returns true if the iterator points to the same Node.
+		bool operator==(const iterator& rhs) const
+		{
+			if (current == rhs.current)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		// Returns true if the iterator DOES NOT point to the same Node.
+		bool operator!=(const iterator& rhs) const
+		{
+			if (current != rhs.current)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		// Returns a reference to the element pointed to by the current Node.
+		T& operator*() const
+		{
+			return current->data;
+		}
+
+		// Pre-increment (returns a refernce to this iterator after it is incremented).
+		iterator& operator++()
+		{
+			current = current->next;
+			return *this;
+		}
+
+		// Post-increment (returns an iterator to the current Node while incrementing the existing iterator).
+		iterator operator++(int)
+		{
+			iterator temp = *this;
+			current = current->next;
+			return temp;
+		}
+
+		// Pre-decrement (returns a refernce to this iterator after it is decremented).
+		iterator& operator--()
+		{
+			current = current->previous;
+			return *this;
+		}
+
+		// Post-decrement (returns an iterator to the current Node while decrementing the existing iterator).
+		iterator operator--(int)
+		{
+			iterator temp = *this;
+			current = current->previous;
+			return temp;
+		}
+	};
+
+	// Creates an iterator pointing to the first element.
+	iterator begin()
+	{
+		iterator temp(head);
+		return temp;
+	}
+
+	// Creates a const iterator pointing to the first element (const).
+	const iterator begin() const
+	{
+		iterator temp(head);
+		return temp;
+	}
+
+	// Creates an iterator pointing to one past the last element.
+	iterator end() 
+	{
+		// NULL can also be used here since the value after tail will always be NULL;
+		iterator temp(tail);
+		++temp;
+		return temp;
+	}
+
+	// Creates a const iterator pointing to one past the last element (const).
+	const iterator end() const
+	{
+		// NULL can also be used here since the value after tail will always be NULL;
+		iterator temp(tail);
+		++temp;
+		return temp;
 	}
 };
 
 
 // PROGRESS
-// 24/28 Baseline functions done.
+// 26/28 Baseline functions done.
 // Still needed:
-//	 At least 1 sorting function (Pick from: Bubble, Insert, Merge).
-// Stretch goals:
+//	 Import sorting stuff from exersizes (All 3 done).
+// Stretch goals (if I'm feeling like I want to do extra for fun.):
 //   Additional functions: Reverse, Unique, Insert(?)
