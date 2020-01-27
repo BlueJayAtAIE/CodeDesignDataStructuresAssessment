@@ -113,6 +113,7 @@ public:
 			Node * temp = tail;
 			tail = tail->previous;
 			delete temp;
+			tail->next = NULL;
 		}
 	}
 

@@ -5,78 +5,106 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+template<typename T>
+void printListValues(tDoubleLinkedList<T> list);
+
 int main()
 {
-	tDoubleLinkedList<int> bleh;
+	char dummy;
 
-	// This list empty...
-	if (bleh.empty())
-	{
-		cout << "YEET" << endl << endl;
-	}
+	// Testing creation and empty.
+	tDoubleLinkedList<int> listA;
 
-	bleh.push_front(6);
+	cout << "listA has just been created. Is it empty?: " << listA.empty() << endl << endl;
+
+	listA.push_front(6);
 
 	// Checking again after adding one element to make sure it doesnt trigger.
-	if (bleh.empty())
-	{
-		cout << "YEET" << endl << endl;
-	}
+	cout << "The following value(s) have been added to the front of listA: 6. Is it empty?: " << listA.empty() << endl << endl;
 
-	bleh.push_front(8);
-	bleh.push_front(8);
-	bleh.push_front(7);
-	bleh.push_front(9);
-	bleh.push_front(2);
-	bleh.push_back(4);
+	// Testing push_front/push_back.
+	listA.push_front(8);
+	listA.push_front(8);
+	listA.push_front(7);
+	listA.push_front(9);
+	listA.push_front(2);
+	listA.push_back(4);
 
+	cout << "The following value(s) have been added to the front of listA: 8, 8, 7, 9, 2." << endl << "The following value(s) have been added to the back of listA: 4." << endl << endl;
 
-	for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	{
-		cout << "Bleh:" << (*it) << endl;
-	}
+	cout << "Current values of listA: ";
+	printListValues(listA);
+	cout << endl << endl;
 
-	tDoubleLinkedList<int> blah(bleh);
+	// Testing copy constructor.
+	tDoubleLinkedList<int> listB(listA);
 
-	cout << "--------------------------------" << endl << "Blah is created as a copy of Bleh." << endl << "All 8s 4s and 2s are removed from Bleh." << endl << endl;
+	cout << "------------------------------------------" << endl << "listB is created as a copy of listA." << endl << endl;
 
-	bleh.resize(12);
+	// Testing remove.
+	listA.remove(8);
+	listA.remove(4);
+	listA.remove(2);
 
-	bleh.remove(8);
-	bleh.remove(4);
-	bleh.remove(2);
+	cout << "All values matching the following have been removed from listA: 8, 4, 2." << endl << endl;
 
-	for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	{
-		cout << "Bleh:" << (*it) << endl;
-	}
+	cout << "Current values of listA: ";
+	printListValues(listA);
+	cout << endl << endl;
 
-	cout << endl;
+	cout << "Current values of listB: ";
+	printListValues(listB);
+	cout << endl << endl;
 
-	for (auto it = blah.begin(); it != blah.end(); ++it)
-	{
-		cout << "Blah:" << (*it) << endl;
-	}
+	cout << "listA will now be set to listB." << endl << endl;
 
-	bleh.pop_front();
+	// Testing =operator.
+	listA = listB;
 
-	cout << "--------------------------------" << endl << "Bleh will now be set to Blah." << endl << endl;
+	cout << "Current values of listA: ";
+	printListValues(listA);
+	cout << endl << endl;
+	cout << "------------------------------------------" << endl << "listA is being resized to hold 12 nodes." << endl << endl;
 
-	bleh = blah;
+	// Testing resize.
+	listA.resize(12);
 
-	for (auto it = bleh.begin(); it != bleh.end(); ++it)
-	{
-		cout << "Bleh:" << (*it) << endl;
-	}
+	cout << "Current values of listA: ";
+	printListValues(listA);
+	cout << endl << endl;
 
-	bleh.clear();
+	// Testing pop_front/pop_back.
+	listA.pop_front();
+	listA.pop_front();
+	listA.pop_back();
 
-	if (bleh.empty())
-	{
-		cout << "YEET" << endl << endl;
-	}
+	cout << "listA has run pop front 2 time(s). listA has run pop back 1 time(s)." << endl << endl;
+
+	// Testing front/back.
+	cout << "The current value of listA's head node is: " << listA.front() << "; the current value of listA's tail node is: " << listA.back() << endl << endl;
+
+	cout << "Current values of listA: ";
+	printListValues(listA);
+	cout << endl << endl;
+
+	cout << "------------------------------------------" << endl << "listA is being cleared." << endl << endl;
+
+	// Testing clear.
+	listA.clear();
+
+	cout << "listA has just been cleared. Is it empty?: " << listA.empty() << endl << endl;
+
+	cout << "Press any lettered key and then enter to close this window." << endl;
+	cin >> dummy;
 	
-	cout << "Please break-point this line!!" << endl;
-
 	return 0;
+}
+
+template<typename T>
+void printListValues(tDoubleLinkedList<T> list)
+{
+	for (auto it = list.begin(); it != list.end(); ++it)
+	{
+		cout << (*it) << ", ";
+	}
 }
