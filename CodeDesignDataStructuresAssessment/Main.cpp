@@ -39,7 +39,7 @@ int main()
 	// Testing copy constructor.
 	tDoubleLinkedList<int> listB(listA);
 
-	cout << "------------------------------------------" << endl << "listB is created as a copy of listA." << endl << endl;
+	cout << "----------------------------------------------------------------" << endl << "listB is created as a copy of listA." << endl << endl;
 
 	// Testing remove.
 	listA.remove(8);
@@ -64,7 +64,7 @@ int main()
 	cout << "Current values of listA: ";
 	printListValues(listA);
 	cout << endl << endl;
-	cout << "------------------------------------------" << endl << "listA is being resized to hold 12 nodes." << endl << endl;
+	cout << "-------------------------------------------------------------" << endl << "listA is being resized to hold 12 nodes." << endl << endl;
 
 	// Testing resize.
 	listA.resize(12);
@@ -87,16 +87,16 @@ int main()
 	printListValues(listA);
 	cout << endl << endl;
 
-	cout << "------------------------------------------" << endl << "listA is being cleared." << endl << endl;
+	cout << "-------------------------------------------------------------" << endl << "listA is being cleared." << endl << endl;
 
 	// Testing clear.
 	listA.clear();
 
 	cout << "listA has just been cleared. Is it empty?: " << listA.empty() << endl << endl;
 
-	cout << "Press any lettered key and then enter to close this window." << endl;
+	cout << ">> Press any lettered key and then enter to close this window. <<" << endl;
 	cin >> dummy;
-	
+
 	return 0;
 }
 
