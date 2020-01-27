@@ -108,7 +108,7 @@ public:
 	// Creates a const iterator pointing to one past the last element.
 	const iterator end() const
 	{
-		// NULL can also be uaed here or whatever TODO fix this awful comment :ok_hand:
+		// NULL can also be used here since the value after tail will always be NULL;
 		iterator temp(tail);
 		++temp;
 		return temp;
@@ -140,11 +140,14 @@ public:
 	// Adds element to the front (Head).
 	void push_front(const T& val)
 	{
-
+		// Create a new node
 		Node * temp = new Node;
 		temp->data = val;
 		temp->next = head;
 		temp->previous = NULL;
+
+		// This triggers only if there IS a head. If there isn't,
+		// tail also becomes head (because when size is one, head == tail effectively);
 		if (head != NULL)
 		{
 			head->previous = temp;
@@ -153,16 +156,22 @@ public:
 		{
 			tail = temp;
 		}
+
+		// Set head to be the new node.
 		head = temp;
 	}
 
 	// Adds element to the back (Tail).
 	void push_back(const T& val)
 	{
+		// Create a new temp node;
 		Node * temp = new Node;
 		temp->data = val;
 		temp->previous = tail;
 		temp->next = NULL;
+
+		// This triggers only if there IS a tail. If there isn't,
+		// head also becomes tail (because when size is one, head == tail effectively);
 		if (tail != NULL)
 		{
 			tail->next = temp;
@@ -171,6 +180,8 @@ public:
 		{
 			head = temp;
 		}
+
+		// Set tail to be the new node.
 		tail = temp;
 	}
 
@@ -227,11 +238,16 @@ public:
 	// Removes all elements equal to the given value.
 	void remove(const T& val)
 	{
+		// Create a node pointer to head.
 		Node * node = head;
+
+		// While the node ISNT null (null being beyond the bounds of the array)...
 		while (node != NULL)
 		{
 			if (node->data == val)
 			{
+				// If the node isnt the head, set the previous node's next to the next of the current node...
+				// if it is the head, change head to the current head's next....
 				if (node != head)
 				{
 					node->previous->next = node->next;
@@ -241,6 +257,8 @@ public:
 					head = head->next;
 				}
 
+				// If the node isnt the tail, set the next node's previous to the previous of the current node...
+				// if it is the tail, change tail to the current tail's previous....
 				if (node != tail)
 				{
 					node->next->previous = node->previous;
@@ -250,10 +268,12 @@ public:
 					tail = tail->previous;
 				}
 
+				// And delete the node, then break out early.
 				delete node;
 				break;
 			}
 
+			// Increment node to be it's own next node.
 			node = node->next;
 		}
 	}
@@ -287,8 +307,8 @@ public:
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
-			// It doesn't matter if this is pop_front or pop_back.
-			// Functionally the same.
+			// IT ABSOLUTELY MATTERS PLEASE COPY THE LOGIC FROM POP_BACK.
+			// If you used pop forward the iterators would be invalidated.
 			// TODO
 		}
 	}
@@ -299,7 +319,7 @@ public:
 	{
 		int actualSize = size();
 
-		// This should only run if the newSize is greater than our current size.
+		// If the new size is bigger than the size, add onto it- else take off the back.
 		if (newSize > actualSize)
 		{
 			for (size_t i = 0; i < (newSize - actualSize); i++)
