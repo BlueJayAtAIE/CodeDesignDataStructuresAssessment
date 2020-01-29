@@ -252,11 +252,12 @@ public:
 		//iterator it = begin();
 		//while (it != end())
 		//{
-			//iterator itTemp = it;
-			//++it;
-			//delete itTemp.current;   // Current is private- doesn't work. C2248.
-			//delete itTemp->current;  // Doesnt use -> operator- doesn't work. C2819 and C2232.
-			//delete itTemp;           // Delete cannot figure out HOW to delete iterators. C2440.
+		//	iterator itTemp = it;
+		//	++it;
+		//	//delete *itTemp;            // "Cannot delete objects that are not poiners." C2541.
+		//	//delete itTemp.current;   // Current is private- doesn't work. C2248.
+		//	//delete itTemp->current;  // Doesnt use -> operator- doesn't work. C2819 and C2232.
+		//	//delete itTemp;           // Delete cannot figure out HOW to delete iterators. C2440.
 		//}
 	}
 
@@ -421,7 +422,5 @@ public:
 
 // PROGRESS
 // 28/28 Baseline functions done.
-// Still needed:
-//	 Import sorting stuff from exersizes (All 3 done).
 // Stretch goals (if I'm feeling like I want to do extra for fun.):
 //   Additional functions: Reverse, Unique, Insert(?)
