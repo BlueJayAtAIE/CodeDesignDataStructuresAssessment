@@ -9,7 +9,15 @@ template<typename K, typename V>
 class tHashmap
 {
 private:
-	V * data;             // Buffer holding all potential pairs in the hashmap.
+	struct Pair
+	{
+		V heldData;
+		K key;
+	};
+
+	Pair * data;		  // Buffer holding all potential pairs in the hashmap.
+	//V * data;             
+	bool * dataIsFilled;  // Check for whether the data slot is filled.
 	size_t dataCapacity;  // Size of the above buffers.
 
 public:
@@ -24,16 +32,17 @@ public:
 
 
 	// Copy assignment.
-	V & operator=(const tHashmap & rhs);
+	tHashmap & operator=(const tHashmap & rhs);
 
 
 	// Returns object at the given key.
 	V & operator[](const K & key);
 
 	// Returns object at the given key (const).
-	const V & operator[](const K & key);
+	const V & operator[](const K & key) const;
 };
 
+// HASHING FUNCTIONS -------------------------------------------------------------------------
 
 template<typename T>
 size_t hash(const T& val)
@@ -104,4 +113,44 @@ size_t hash<char>(const char val[], size_t size)
 	}
 
 	return temp;
+}
+
+// FUNCTIONS FOR HASHTABLE -------------------------------------------------------------------
+
+template<typename K, typename V>
+inline tHashmap<K, V>::tHashmap()
+{
+	dataCapacity = 100;
+	data = new Pair[dataCapacity];
+	dataIsFilled = new bool[dataCapacity]();
+}
+
+template<typename K, typename V>
+inline tHashmap<K, V>::tHashmap(const tHashmap & other)
+{
+
+}
+
+template<typename K, typename V>
+inline tHashmap<K, V>::~tHashmap()
+{
+	delete data;
+}
+
+template<typename K, typename V>
+inline V & tHashmap<K, V>::operator[](const K & key)
+{
+	auto hashedKey = hash(key) % dataCapacity;
+	dataIsFilled[hashedKey] = true;
+	data[hashedKey].key = key;
+	return data[hashedKey].heldData;
+}
+
+template<typename K, typename V>
+inline const V & tHashmap<K, V>::operator[](const K & key) const
+{
+	auto hashedKey = hash(key) % dataCapacity;
+	dataIsFilled[hashedKey] = true;
+	data[hashedKey].key = key;
+	return data[hashedKey].heldData;
 }
