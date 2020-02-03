@@ -9,20 +9,24 @@ template<typename K, typename V>
 class tHashmap
 {
 private:
-	struct Pair
-	{
-		V heldData;
-		K key;
-	};
+	// UNUSED.
+	//struct Pair
+	//{
+	//	V heldData;
+	//	K key;
+	//};
 
-	Pair * data;		  // Buffer holding all potential pairs in the hashmap.
-	//V * data;             
-	bool * dataIsFilled;  // Check for whether the data slot is filled.
+	V * data;		  // Buffer holding all potential pairs in the hashmap.
+	//Pair * data;		  // UNUSED. Switched back to using V instead.
 	size_t dataCapacity;  // Size of the above buffers.
 
 public:
-	// Constructs a hashmap with a specific size.
+	// Constructs a hashmap with a fixed size.
 	tHashmap();
+
+
+	// Constructs a hashmap with a defined size.
+	tHashmap(size_t size);
 
 	// Copy constructor.
 	tHashmap(const tHashmap & other);
@@ -32,7 +36,18 @@ public:
 
 
 	// Copy assignment.
-	tHashmap & operator=(const tHashmap & rhs);
+	tHashmap & operator=(const tHashmap & rhs)
+	{
+		dataCapacity = rhs.dataCapacity;
+
+		// Do the copy thing.
+		for (size_t i = 0; i < dataCapacity; i++)
+		{
+			data[i] = rhs.data[i];
+		}
+
+		return *this;
+	}
 
 
 	// Returns object at the given key.
@@ -121,36 +136,40 @@ template<typename K, typename V>
 inline tHashmap<K, V>::tHashmap()
 {
 	dataCapacity = 100;
-	data = new Pair[dataCapacity];
-	dataIsFilled = new bool[dataCapacity]();
+	data = new V[dataCapacity];
+}
+
+template<typename K, typename V>
+inline tHashmap<K, V>::tHashmap(size_t size)
+{
+	dataCapacity = size;
+	data = new V[dataCapacity];
 }
 
 template<typename K, typename V>
 inline tHashmap<K, V>::tHashmap(const tHashmap & other)
 {
+	data = new V[other.dataCapacity];
 
+	*this = other;
 }
 
 template<typename K, typename V>
 inline tHashmap<K, V>::~tHashmap()
 {
-	delete data;
+	delete[] data;
 }
 
 template<typename K, typename V>
 inline V & tHashmap<K, V>::operator[](const K & key)
 {
 	auto hashedKey = hash(key) % dataCapacity;
-	dataIsFilled[hashedKey] = true;
-	data[hashedKey].key = key;
-	return data[hashedKey].heldData;
+	return data[hashedKey];
 }
 
 template<typename K, typename V>
 inline const V & tHashmap<K, V>::operator[](const K & key) const
 {
 	auto hashedKey = hash(key) % dataCapacity;
-	dataIsFilled[hashedKey] = true;
-	data[hashedKey].key = key;
-	return data[hashedKey].heldData;
+	return data[hashedKey];
 }
